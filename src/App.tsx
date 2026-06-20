@@ -16,6 +16,7 @@ import LegendarySwordList from "@/pages/LegendarySwordList";
 import LegendarySwordDetail from "@/pages/LegendarySwordDetail";
 import MuseumList from "@/pages/MuseumList";
 import MuseumDetail from "@/pages/MuseumDetail";
+import SwordRankingList from "@/pages/SwordRankingList";
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/swords" element={<SwordList />} />
             <Route path="/swords/:id" element={<SwordDetail />} />
+            <Route path="/sword-rankings" element={<SwordRankingList />} />
             <Route path="/swordsmen" element={<SwordsmanList />} />
             <Route path="/swordsmen/:id" element={<SwordsmanDetail />} />
             <Route path="/sects" element={<SectList />} />

@@ -274,6 +274,99 @@ export interface SwordVersion {
   notableEvents: string[];
 }
 
+export type RankingDimension = 'comprehensive' | 'historicalInfluence' | 'citationCount' | 'heritageLength' | 'relatedFigures';
+
+export interface RankingDimensionInfo {
+  dimension: RankingDimension;
+  label: string;
+  description: string;
+  weight: number;
+  icon: string;
+}
+
+export interface SwordRankingMetrics {
+  swordId: string;
+  swordName: string;
+  swordAlias: string;
+  swordImageUrl: string;
+  dynasty: string;
+  historicalInfluence: number;
+  historicalInfluenceDetail: {
+    majorEvents: number;
+    historicalSignificance: number;
+    dynastyInfluence: number;
+  };
+  citationCount: number;
+  citationCountDetail: {
+    historicalRecords: number;
+    academicPapers: number;
+    literaryWorks: number;
+  };
+  heritageLength: number;
+  heritageLengthDetail: {
+    forgingYear: string;
+    lastKnownYear: string;
+    yearsInCirculation: number;
+    holderCount: number;
+  };
+  relatedFiguresCount: number;
+  relatedFiguresDetail: {
+    famousHolders: number;
+    relatedSwordsmen: number;
+    historicalFigures: number;
+  };
+  comprehensiveScore: number;
+  rank: number;
+  previousRank?: number;
+  rankChange: number;
+  trend: 'up' | 'down' | 'stable';
+  lastUpdated: string;
+}
+
+export interface RankingListResponse {
+  list: SwordRankingMetrics[];
+  total: number;
+  dimension: RankingDimension;
+  lastUpdated: string;
+}
+
+export interface RankingTrendData {
+  year: string;
+  dynasty: string;
+  avgComprehensiveScore: number;
+  avgHistoricalInfluence: number;
+  avgCitationCount: number;
+  avgHeritageLength: number;
+  avgRelatedFigures: number;
+  swordCount: number;
+}
+
+export interface RankingCalculationDetail {
+  swordId: string;
+  swordName: string;
+  dimensions: {
+    dimension: RankingDimension;
+    score: number;
+    normalizedScore: number;
+    weight: number;
+    weightedScore: number;
+    description: string;
+  }[];
+  totalWeightedScore: number;
+  finalScore: number;
+  calculationFormula: string;
+  dataSources: string[];
+}
+
+export interface RankingFilterParams {
+  page?: number;
+  limit?: number;
+  dimension?: RankingDimension;
+  dynasty?: string;
+  trend?: 'up' | 'down' | 'stable';
+  sortOrder?: 'asc' | 'desc';
+}
+
 export type KnowledgeCategory = '剑材' | '锻造工艺' | '淬火方法' | '装具结构' | '铸剑流派';
 
 export interface KnowledgeArticle {

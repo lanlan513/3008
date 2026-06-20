@@ -4,7 +4,9 @@ import type {
   MapFilterParams, ComparisonLibrary, WuxiaWork, KnowledgeArticle, KnowledgeCategoryInfo,
   KnowledgeFilterParams, LegendarySword, LegendarySwordListResponse, LegendarySwordFilterParams,
   SwordCollection, MuseumCollectionListResponse, MuseumFilterParams, CollectionInstitution,
-  DiscoverySite, DynastyPreservationStats, InstitutionStats, MuseumOverviewStats
+  DiscoverySite, DynastyPreservationStats, InstitutionStats, MuseumOverviewStats,
+  RankingDimensionInfo, SwordRankingMetrics, RankingListResponse, RankingFilterParams,
+  RankingTrendData, RankingCalculationDetail
 } from '../types';
 
 const API_BASE = '/api';
@@ -314,5 +316,56 @@ export const museumApi = {
 
   getDiscoverySiteById: (id: string): Promise<DiscoverySite> => {
     return request<DiscoverySite>(`/museum/discovery-sites/${id}`);
+  },
+};
+
+export const swordRankingApi = {
+  getDimensions: (): Promise<RankingDimensionInfo[]> => {
+    return request<RankingDimensionInfo[]>('/sword-rankings/dimensions');
+  },
+
+  getRankings: (params: RankingFilterParams = {}): Promise<RankingListResponse> => {
+    const query = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined) {
+        query.append(key, String(value));
+      }
+    });
+    const queryString = query.toString();
+    return request<RankingListResponse>(`/sword-rankings${queryString ? `?${queryString}` : ''}`);
+  },
+
+  getTrendData: (): Promise<RankingTrendData[]> => {
+    return request<RankingTrendData[]>('/sword-rankings/trend');
+  },
+
+  getOverviewStats: (): Promise<{
+    totalSwords: number;
+    avgComprehensiveScore: number;
+    highestScore: number;
+    lowestScore: number;
+    byDynasty: Record<string, number>;
+    trendingUp: number;
+    trendingDown: number;
+    stable: number;
+    lastUpdated: string;
+  }> => {
+    return request('/sword-rankings/overview-stats');
+  },
+
+  getTopRankings: (dimension?: string, limit?: number): Promise<SwordRankingMetrics[]> => {
+    const params = new URLSearchParams();
+    if (dimension) params.append('dimension', dimension);
+    if (limit) params.append('limit', String(limit));
+    const queryString = params.toString();
+    return request<SwordRankingMetrics[]>(`/sword-rankings/top${queryString ? `?${queryString}` : ''}`);
+  },
+
+  getRankingById: (id: string): Promise<SwordRankingMetrics> => {
+    return request<SwordRankingMetrics>(`/sword-rankings/${id}`);
+  },
+
+  getCalculationDetail: (id: string): Promise<RankingCalculationDetail> => {
+    return request<RankingCalculationDetail>(`/sword-rankings/${id}/calculation-detail`);
   },
 };
