@@ -1,4 +1,4 @@
-import type { Sword, Swordsman, SwordsmanDetail, Sect, ApiResponse, SwordListResponse, SwordFilterParams, SwordHeritage, SwordsmanSwordTenure } from '../types';
+import type { Sword, Swordsman, SwordsmanDetail, Sect, ApiResponse, SwordListResponse, SwordFilterParams, SwordHeritage, SwordsmanSwordTenure, MapLocation, HistoricalEvent, RegionStats, DynastyGeoStats, MapFilterParams } from '../types';
 
 const API_BASE = '/api';
 
@@ -93,5 +93,57 @@ export const sectApi = {
   
   getSectById: (id: string): Promise<Sect> => {
     return request<Sect>(`/sects/${id}`);
+  },
+};
+
+export interface LocationDetails {
+  location: MapLocation;
+  relatedSects: Sect[];
+  relatedSwords: Sword[];
+  relatedSwordsmen: Swordsman[];
+  relatedEvents: HistoricalEvent[];
+}
+
+export const mapApi = {
+  getAllLocations: (): Promise<MapLocation[]> => {
+    return request<MapLocation[]>('/map/locations');
+  },
+
+  getFilteredLocations: (params: MapFilterParams): Promise<MapLocation[]> => {
+    const query = new URLSearchParams();
+    if (params.types.length > 0) query.append('types', params.types.join(','));
+    if (params.dynasties.length > 0) query.append('dynasties', params.dynasties.join(','));
+    if (params.regions.length > 0) query.append('regions', params.regions.join(','));
+    if (params.minImportance !== undefined) query.append('minImportance', String(params.minImportance));
+    const queryString = query.toString();
+    return request<MapLocation[]>(`/map/locations/filter${queryString ? `?${queryString}` : ''}`);
+  },
+
+  getLocationById: (id: string): Promise<MapLocation> => {
+    return request<MapLocation>(`/map/locations/${id}`);
+  },
+
+  getLocationDetails: (id: string): Promise<LocationDetails> => {
+    return request<LocationDetails>(`/map/locations/${id}/details`);
+  },
+
+  getAllRegions: (): Promise<string[]> => {
+    return request<string[]>('/map/locations/regions');
+  },
+
+  getAllHistoricalEvents: (): Promise<HistoricalEvent[]> => {
+    return request<HistoricalEvent[]>('/map/events');
+  },
+
+  getHistoricalEventById: (id: string): Promise<HistoricalEvent> => {
+    return request<HistoricalEvent>(`/map/events/${id}`);
+  },
+
+  getRegionStats: (): Promise<RegionStats[]> => {
+    return request<RegionStats[]>('/map/stats/regions');
+  },
+
+  getDynastyGeoStats: (): Promise<DynastyGeoStats[]> => {
+    return request<DynastyGeoStats[]>('/map/stats/dynasties');
   },
 };

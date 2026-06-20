@@ -130,3 +130,74 @@ export interface SwordFilterParams {
   sortBy?: 'popularity' | 'dynasty' | 'name';
   sortOrder?: 'asc' | 'desc';
 }
+
+export interface GeoCoord {
+  x: number;
+  y: number;
+}
+
+export type LocationType = 'sect' | 'sword_forge' | 'event' | 'birthplace' | 'battlefield';
+
+export interface MapLocation {
+  id: string;
+  name: string;
+  type: LocationType;
+  coord: GeoCoord;
+  region: string;
+  description: string;
+  relatedSectIds?: string[];
+  relatedSwordIds?: string[];
+  relatedSwordsmanIds?: string[];
+  relatedEventIds?: string[];
+  dynasty?: string;
+  importance: number;
+}
+
+export interface HistoricalEvent {
+  id: string;
+  title: string;
+  year: string;
+  dynasty: string;
+  locationId: string;
+  locationName: string;
+  description: string;
+  relatedSwordIds: string[];
+  relatedSwordsmanIds: string[];
+  relatedSectIds: string[];
+  significance: 'minor' | 'notable' | 'major' | 'legendary';
+}
+
+export interface SwordOrigin {
+  swordId: string;
+  swordName: string;
+  locationId: string;
+  locationName: string;
+  forgingMethod: string;
+  forger?: string;
+}
+
+export interface RegionStats {
+  region: string;
+  sectCount: number;
+  swordCount: number;
+  eventCount: number;
+  swordsmanCount: number;
+  totalScore: number;
+}
+
+export interface DynastyGeoStats {
+  dynasty: string;
+  regions: Record<string, number>;
+  eventCount: number;
+  swordCount: number;
+  swordsmanCount: number;
+}
+
+export type SpatialFilterType = 'all' | 'sect' | 'sword_forge' | 'event' | 'birthplace' | 'battlefield';
+
+export interface MapFilterParams {
+  types: SpatialFilterType[];
+  dynasties: string[];
+  regions: string[];
+  minImportance?: number;
+}

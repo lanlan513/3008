@@ -3,7 +3,7 @@ import * as swordHeritageService from '../services/swordHeritageService.js';
 import type { ApiResponse } from '../../../shared/types.js';
 
 export const getSwordHeritage = (req: Request, res: Response) => {
-  const { swordId } = req.params;
+  const { id: swordId } = req.params;
   const heritage = swordHeritageService.getSwordHeritage(swordId);
 
   if (!heritage) {

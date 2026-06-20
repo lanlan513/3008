@@ -7,6 +7,8 @@ import SwordDetail from "@/pages/SwordDetail";
 import SwordsmanList from "@/pages/SwordsmanList";
 import SwordsmanDetail from "@/pages/SwordsmanDetail";
 import SectList from "@/pages/SectList";
+import JianghuMap from "@/pages/JianghuMap";
+import GeographyStats from "@/pages/GeographyStats";
 
 export default function App() {
   return (
@@ -21,6 +23,8 @@ export default function App() {
             <Route path="/swordsmen" element={<SwordsmanList />} />
             <Route path="/swordsmen/:id" element={<SwordsmanDetail />} />
             <Route path="/sects" element={<SectList />} />
+            <Route path="/map" element={<JianghuMap />} />
+            <Route path="/map/stats" element={<GeographyStats />} />
           </Routes>
         </main>
         <Footer />
