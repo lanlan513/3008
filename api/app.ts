@@ -16,6 +16,7 @@ import swordRoutes from './src/routes/swords.js'
 import swordsmanRoutes from './src/routes/swordsmen.js'
 import sectRoutes from './src/routes/sects.js'
 import mapRoutes from './src/routes/map.js'
+import comparisonRoutes from './src/routes/comparison.js'
 
 // for esm mode
 const __filename = fileURLToPath(import.meta.url)
@@ -38,6 +39,7 @@ app.use('/api/swords', swordRoutes)
 app.use('/api/swordsmen', swordsmanRoutes)
 app.use('/api/sects', sectRoutes)
 app.use('/api/map', mapRoutes)
+app.use('/api/comparison', comparisonRoutes)
 
 /**
  * health

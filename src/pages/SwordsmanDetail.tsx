@@ -18,13 +18,14 @@ import {
   ScrollText,
   Network,
 } from 'lucide-react';
-import { swordsmanApi } from '../api';
-import type { SwordsmanDetail, Sword, MartialArt, LifeEvent, SwordsmanSwordTenure, SwordHeritage } from '../types';
+import { swordsmanApi, comparisonApi } from '../api';
+import type { SwordsmanDetail, Sword, MartialArt, LifeEvent, SwordsmanSwordTenure, SwordHeritage, ComparisonLibrary } from '../types';
 import { cn } from '@/lib/utils';
 import RelationshipGraph from '../components/swordsman/RelationshipGraph';
 import SwordsmanTenureList from '../components/swordsman/SwordsmanTenureList';
 import SwordsmanSwordGraph from '../components/swordsman/SwordsmanSwordGraph';
 import SwordHeritageChain from '../components/swordsman/SwordHeritageChain';
+import ComparisonEntry from '../components/comparison/ComparisonEntry';
 
 const MARTIAL_ART_COLORS: Record<string, string> = {
   '剑法': 'from-cinnabar-500 to-cinnabar-700',
@@ -48,6 +49,7 @@ export default function SwordsmanDetail() {
   const [swords, setSwords] = useState<Sword[]>([]);
   const [swordTenures, setSwordTenures] = useState<SwordsmanSwordTenure[]>([]);
   const [heritages, setHeritages] = useState<SwordHeritage[]>([]);
+  const [comparison, setComparison] = useState<ComparisonLibrary | null>(null);
   const [loading, setLoading] = useState(true);
   const [isLiked, setIsLiked] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -58,16 +60,18 @@ export default function SwordsmanDetail() {
     const fetchSwordsmanDetail = async () => {
       setLoading(true);
       try {
-        const [detailData, swordsData, tenuresData, heritagesData] = await Promise.all([
+        const [detailData, swordsData, tenuresData, heritagesData, comparisonData] = await Promise.all([
           swordsmanApi.getSwordsmanDetailById(id),
           swordsmanApi.getSwordsmanSwords(id),
           swordsmanApi.getSwordsmanSwordTenures(id),
           swordsmanApi.getSwordsmanHeritages(id),
+          comparisonApi.getSwordsmanComparison(id).catch(() => null),
         ]);
         setSwordsman(detailData);
         setSwords(swordsData);
         setSwordTenures(tenuresData);
         setHeritages(heritagesData);
+        setComparison(comparisonData);
       } catch (error) {
         console.error('Failed to fetch swordsman detail:', error);
       } finally {
@@ -406,6 +410,16 @@ export default function SwordsmanDetail() {
           </div>
 
           <div className="space-y-8">
+            {comparison && (
+              <ComparisonEntry
+                targetId={id!}
+                targetName={swordsman?.name || ''}
+                targetType="swordsman"
+                hasComparison={!!comparison}
+                style={{ animationDelay: '0.25s', animationFillMode: 'forwards', opacity: 0 }}
+              />
+            )}
+
             <div className="ink-card p-6 animate-fade-in-up" style={{ animationDelay: '0.3s', animationFillMode: 'forwards', opacity: 0 }}>
               <h3 className="font-brush text-2xl text-ink-900 mb-6 flex items-center gap-2">
                 <SwordIcon className="w-5 h-5 text-cinnabar-600" />

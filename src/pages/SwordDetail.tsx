@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, User, Building2, Flame, BookOpen, History, Sparkles, Share2, Heart, Users, ChevronRight, ScrollText, Network } from 'lucide-react';
-import { swordApi, swordsmanApi } from '../api';
-import type { Sword, Swordsman, SwordHeritage } from '../types';
+import { swordApi, swordsmanApi, comparisonApi } from '../api';
+import type { Sword, Swordsman, SwordHeritage, ComparisonLibrary } from '../types';
 import { cn } from '@/lib/utils';
 import HeritageTimeline from '../components/sword/HeritageTimeline';
 import SwordHolderGraph from '../components/sword/SwordHolderGraph';
+import ComparisonEntry from '../components/comparison/ComparisonEntry';
 
 const ATTRIBUTE_LABELS: Record<string, { label: string; color: string }> = {
   sharpness: { label: '锋利', color: 'from-cinnabar-500 to-cinnabar-700' },
@@ -20,6 +21,7 @@ export default function SwordDetail() {
   const [sword, setSword] = useState<Sword | null>(null);
   const [relatedSwordsmen, setRelatedSwordsmen] = useState<Swordsman[]>([]);
   const [heritage, setHeritage] = useState<SwordHeritage | null>(null);
+  const [comparison, setComparison] = useState<ComparisonLibrary | null>(null);
   const [loading, setLoading] = useState(true);
   const [isLiked, setIsLiked] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -30,14 +32,16 @@ export default function SwordDetail() {
     const fetchSword = async () => {
       setLoading(true);
       try {
-        const [swordData, swordsmenData, heritageData] = await Promise.all([
+        const [swordData, swordsmenData, heritageData, comparisonData] = await Promise.all([
           swordApi.getSwordById(id),
           swordsmanApi.getSwordsmenBySwordId(id),
           swordApi.getSwordHeritage(id),
+          comparisonApi.getSwordComparison(id).catch(() => null),
         ]);
         setSword(swordData);
         setRelatedSwordsmen(swordsmenData);
         setHeritage(heritageData);
+        setComparison(comparisonData);
       } catch (error) {
         console.error('Failed to fetch sword:', error);
       } finally {
@@ -223,6 +227,16 @@ export default function SwordDetail() {
           </div>
 
           <div className="space-y-8">
+            {comparison && (
+              <ComparisonEntry
+                targetId={id!}
+                targetName={sword?.name || ''}
+                targetType="sword"
+                hasComparison={!!comparison}
+                style={{ animationDelay: '0.25s', animationFillMode: 'forwards', opacity: 0 }}
+              />
+            )}
+
             <div className="ink-card p-6 animate-fade-in-up sticky top-24" style={{ animationDelay: '0.3s', animationFillMode: 'forwards', opacity: 0 }}>
               <h3 className="font-brush text-2xl text-ink-900 mb-6">剑之属性</h3>
               

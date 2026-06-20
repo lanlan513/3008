@@ -201,3 +201,91 @@ export interface MapFilterParams {
   regions: string[];
   minImportance?: number;
 }
+
+export interface WuxiaWork {
+  id: string;
+  title: string;
+  author: string;
+  year: number;
+  type: '小说' | '影视' | '评书' | '戏曲' | '其他';
+  dynasty: string;
+  description: string;
+  coverUrl: string;
+  popularity: number;
+}
+
+export type ComparisonTargetType = 'swordsman' | 'sword';
+
+export interface SwordsmanVersion {
+  id: string;
+  workId: string;
+  workTitle: string;
+  workAuthor: string;
+  workYear: number;
+  workType: WuxiaWork['type'];
+  name: string;
+  alias?: string;
+  title?: string;
+  sect?: string;
+  dynasty?: string;
+  birthYear?: string;
+  deathYear?: string;
+  description: string;
+  personality?: string;
+  appearance?: string;
+  martialArts: MartialArt[];
+  notableEvents: string[];
+  relationships: Relationship[];
+  avatarUrl?: string;
+  authorInterpretation: string;
+  attributes?: {
+    martialLevel: number;
+    wisdom: number;
+    leadership: number;
+    loyalty: number;
+    charisma: number;
+  };
+}
+
+export interface SwordVersion {
+  id: string;
+  workId: string;
+  workTitle: string;
+  workAuthor: string;
+  workYear: number;
+  workType: WuxiaWork['type'];
+  name: string;
+  alias?: string;
+  owner?: string;
+  forger?: string;
+  dynasty?: string;
+  description: string;
+  history?: string;
+  legend?: string;
+  imageUrl?: string;
+  materials?: string[];
+  authorInterpretation: string;
+  attributes: {
+    sharpness: number;
+    hardness: number;
+    flexibility: number;
+    craftsmanship: number;
+  };
+  notableEvents: string[];
+}
+
+export interface ComparisonLibrary {
+  id: string;
+  targetType: ComparisonTargetType;
+  targetId: string;
+  targetName: string;
+  targetAvatarUrl?: string;
+  coverUrl: string;
+  description: string;
+  versionCount: number;
+  versions: (SwordsmanVersion | SwordVersion)[];
+  swordsmanVersions?: SwordsmanVersion[];
+  swordVersions?: SwordVersion[];
+  works: WuxiaWork[];
+  analysis?: string;
+}

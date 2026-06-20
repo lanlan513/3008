@@ -1,4 +1,4 @@
-import type { Sword, Swordsman, SwordsmanDetail, Sect, ApiResponse, SwordListResponse, SwordFilterParams, SwordHeritage, SwordsmanSwordTenure, MapLocation, HistoricalEvent, RegionStats, DynastyGeoStats, MapFilterParams } from '../types';
+import type { Sword, Swordsman, SwordsmanDetail, Sect, ApiResponse, SwordListResponse, SwordFilterParams, SwordHeritage, SwordsmanSwordTenure, MapLocation, HistoricalEvent, RegionStats, DynastyGeoStats, MapFilterParams, ComparisonLibrary, WuxiaWork } from '../types';
 
 const API_BASE = '/api';
 
@@ -145,5 +145,36 @@ export const mapApi = {
 
   getDynastyGeoStats: (): Promise<DynastyGeoStats[]> => {
     return request<DynastyGeoStats[]>('/map/stats/dynasties');
+  },
+};
+
+export const comparisonApi = {
+  getAllLibraries: (): Promise<ComparisonLibrary[]> => {
+    return request<ComparisonLibrary[]>('/comparison/libraries');
+  },
+
+  getLibraryById: (id: string): Promise<ComparisonLibrary> => {
+    return request<ComparisonLibrary>(`/comparison/libraries/${id}`);
+  },
+
+  getSwordsmanComparison: (swordsmanId: string): Promise<ComparisonLibrary> => {
+    return request<ComparisonLibrary>(`/comparison/swordsman/${swordsmanId}`);
+  },
+
+  getSwordComparison: (swordId: string): Promise<ComparisonLibrary> => {
+    return request<ComparisonLibrary>(`/comparison/sword/${swordId}`);
+  },
+
+  getAllWorks: (): Promise<WuxiaWork[]> => {
+    return request<WuxiaWork[]>('/comparison/works');
+  },
+
+  getPopularWorks: (limit?: number): Promise<WuxiaWork[]> => {
+    const query = limit ? `?limit=${limit}` : '';
+    return request<WuxiaWork[]>(`/comparison/works/popular${query}`);
+  },
+
+  getWorkById: (id: string): Promise<WuxiaWork> => {
+    return request<WuxiaWork>(`/comparison/works/${id}`);
   },
 };

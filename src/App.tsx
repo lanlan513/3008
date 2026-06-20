@@ -9,6 +9,7 @@ import SwordsmanDetail from "@/pages/SwordsmanDetail";
 import SectList from "@/pages/SectList";
 import JianghuMap from "@/pages/JianghuMap";
 import GeographyStats from "@/pages/GeographyStats";
+import ComparisonDetail from "@/pages/ComparisonDetail";
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
             <Route path="/sects" element={<SectList />} />
             <Route path="/map" element={<JianghuMap />} />
             <Route path="/map/stats" element={<GeographyStats />} />
+            <Route path="/comparison/:targetType/:id" element={<ComparisonDetail />} />
           </Routes>
         </main>
         <Footer />
