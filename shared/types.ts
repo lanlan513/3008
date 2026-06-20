@@ -317,6 +317,77 @@ export interface KnowledgeCategoryInfo {
   count: number;
 }
 
+export type CredibilityLevel = '正史确证' | '多源互证' | '孤证存疑' | '野史传闻' | '民间传说';
+
+export interface SourceReference {
+  id: string;
+  type: '正史' | '野史' | '笔记' | '诗词' | '戏曲' | '考古' | '口述' | '残卷';
+  title: string;
+  author?: string;
+  dynasty?: string;
+  description: string;
+  reliability: number;
+  excerpt?: string;
+}
+
+export type CitationConclusion = '确有其剑' | '可能存在' | '疑为虚构' | '纯属传说' | '待考';
+
+export interface AcademicCitation {
+  id: string;
+  researcher: string;
+  year: string;
+  content: string;
+  conclusion: CitationConclusion;
+  references: string[];
+}
+
+export interface LegendarySword {
+  id: string;
+  name: string;
+  alias: string;
+  dynasty: string;
+  description: string;
+  legend: string;
+  imageUrl: string;
+  credibilityLevel: CredibilityLevel;
+  credibilityScore: number;
+  evidenceCount: number;
+  lastSeen?: string;
+  disappearanceTheory?: string;
+  sources: SourceReference[];
+  citations: AcademicCitation[];
+  relatedSwordIds?: string[];
+  tags: string[];
+  mysteryLevel: number;
+  popularity: number;
+  createdAt: string;
+}
+
+export interface LegendarySwordListResponse {
+  list: LegendarySword[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+export interface LegendarySwordFilterParams {
+  page?: number;
+  limit?: number;
+  dynasty?: string;
+  credibilityLevel?: CredibilityLevel;
+  keyword?: string;
+  sortBy?: 'popularity' | 'credibilityScore' | 'mysteryLevel' | 'name';
+  sortOrder?: 'asc' | 'desc';
+}
+
+export interface KnowledgeCategoryInfo {
+  category: KnowledgeCategory;
+  label: string;
+  description: string;
+  icon: string;
+  count: number;
+}
+
 export interface KnowledgeFilterParams {
   category?: KnowledgeCategory;
   keyword?: string;

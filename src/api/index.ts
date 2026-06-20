@@ -1,4 +1,4 @@
-import type { Sword, Swordsman, SwordsmanDetail, Sect, ApiResponse, SwordListResponse, SwordFilterParams, SwordHeritage, SwordsmanSwordTenure, MapLocation, HistoricalEvent, RegionStats, DynastyGeoStats, MapFilterParams, ComparisonLibrary, WuxiaWork, KnowledgeArticle, KnowledgeCategoryInfo, KnowledgeFilterParams } from '../types';
+import type { Sword, Swordsman, SwordsmanDetail, Sect, ApiResponse, SwordListResponse, SwordFilterParams, SwordHeritage, SwordsmanSwordTenure, MapLocation, HistoricalEvent, RegionStats, DynastyGeoStats, MapFilterParams, ComparisonLibrary, WuxiaWork, KnowledgeArticle, KnowledgeCategoryInfo, KnowledgeFilterParams, LegendarySword, LegendarySwordListResponse, LegendarySwordFilterParams } from '../types';
 
 const API_BASE = '/api';
 
@@ -213,5 +213,37 @@ export const knowledgeApi = {
 
   getArticlesBySwordsmanId: (swordsmanId: string): Promise<KnowledgeArticle[]> => {
     return request<KnowledgeArticle[]>(`/knowledge/by-swordsman/${swordsmanId}`);
+  },
+};
+
+export const legendarySwordApi = {
+  getLegendarySwords: (params: LegendarySwordFilterParams = {}): Promise<LegendarySwordListResponse> => {
+    const query = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined) {
+        query.append(key, String(value));
+      }
+    });
+    const queryString = query.toString();
+    return request<LegendarySwordListResponse>(`/legendary-swords${queryString ? `?${queryString}` : ''}`);
+  },
+
+  getPopularLegendarySwords: (limit?: number): Promise<LegendarySword[]> => {
+    const query = limit ? `?limit=${limit}` : '';
+    return request<LegendarySword[]>(`/legendary-swords/popular${query}`);
+  },
+
+  getLegendarySwordById: (id: string): Promise<LegendarySword> => {
+    return request<LegendarySword>(`/legendary-swords/${id}`);
+  },
+
+  getLegendarySwordStats: (): Promise<{
+    total: number;
+    byCredibility: Record<string, number>;
+    byDynasty: Record<string, number>;
+    avgCredibility: number;
+    avgMystery: number;
+  }> => {
+    return request('/legendary-swords/stats');
   },
 };

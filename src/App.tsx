@@ -12,6 +12,8 @@ import GeographyStats from "@/pages/GeographyStats";
 import ComparisonDetail from "@/pages/ComparisonDetail";
 import KnowledgeList from "@/pages/KnowledgeList";
 import KnowledgeDetail from "@/pages/KnowledgeDetail";
+import LegendarySwordList from "@/pages/LegendarySwordList";
+import LegendarySwordDetail from "@/pages/LegendarySwordDetail";
 
 export default function App() {
   return (
@@ -31,6 +33,8 @@ export default function App() {
             <Route path="/comparison/:targetType/:id" element={<ComparisonDetail />} />
             <Route path="/knowledge" element={<KnowledgeList />} />
             <Route path="/knowledge/:id" element={<KnowledgeDetail />} />
+            <Route path="/legendary-swords" element={<LegendarySwordList />} />
+            <Route path="/legendary-swords/:id" element={<LegendarySwordDetail />} />
           </Routes>
         </main>
         <Footer />

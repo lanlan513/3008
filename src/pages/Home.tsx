@@ -1,29 +1,36 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Sword, ChevronRight, Sparkles, Users, Building2, TrendingUp } from 'lucide-react';
-import { swordApi, swordsmanApi, sectApi } from '../api';
-import type { Sword as SwordType, Swordsman, Sect } from '../types';
+import { Sword, ChevronRight, Sparkles, Users, Building2, TrendingUp, Ghost } from 'lucide-react';
+import { swordApi, swordsmanApi, sectApi, legendarySwordApi } from '../api';
+import type { Sword as SwordType, Swordsman, Sect, LegendarySword } from '../types';
 import SwordCard from '../components/sword/SwordCard';
 import SwordsmanCard from '../components/swordsman/SwordsmanCard';
 import SectCard from '../components/sect/SectCard';
+import LegendarySwordCard from '../components/legendary/LegendarySwordCard';
 
 export default function Home() {
   const [popularSwords, setPopularSwords] = useState<SwordType[]>([]);
   const [latestSwordsmen, setLatestSwordsmen] = useState<Swordsman[]>([]);
   const [popularSects, setPopularSects] = useState<Sect[]>([]);
+  const [popularLegendarySwords, setPopularLegendarySwords] = useState<LegendarySword[]>([]);
+  const [legendaryStats, setLegendaryStats] = useState<{ total: number; avgCredibility: number } | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [swords, swordsmen, sects] = await Promise.all([
+        const [swords, swordsmen, sects, legendarySwords, stats] = await Promise.all([
           swordApi.getPopularSwords(6),
           swordsmanApi.getLatestSwordsmen(4),
           sectApi.getPopularSects(6),
+          legendarySwordApi.getPopularLegendarySwords(3),
+          legendarySwordApi.getLegendarySwordStats(),
         ]);
         setPopularSwords(swords);
         setLatestSwordsmen(swordsmen);
         setPopularSects(sects);
+        setPopularLegendarySwords(legendarySwords);
+        setLegendaryStats({ total: stats.total, avgCredibility: stats.avgCredibility });
       } catch (error) {
         console.error('Failed to fetch data:', error);
       } finally {
@@ -85,10 +92,15 @@ export default function Home() {
                 </Link>
               </div>
               
-              <div className="mt-12 flex justify-center gap-8 text-ink-600 opacity-0 animate-fade-in-up" style={{ animationDelay: '1.3s', animationFillMode: 'forwards' }}>
+              <div className="mt-12 flex flex-wrap justify-center gap-8 text-ink-600 opacity-0 animate-fade-in-up" style={{ animationDelay: '1.3s', animationFillMode: 'forwards' }}>
                 <div className="text-center">
                   <div className="font-brush text-3xl text-cinnabar-600">12</div>
                   <div className="font-song text-xs">传世名剑</div>
+                </div>
+                <div className="w-px bg-ink-300" />
+                <div className="text-center">
+                  <div className="font-brush text-3xl text-purple-600">{legendaryStats?.total || '...'}</div>
+                  <div className="font-song text-xs">失传名剑</div>
                 </div>
                 <div className="w-px bg-ink-300" />
                 <div className="text-center">
@@ -158,6 +170,55 @@ export default function Home() {
       <div className="ink-divider max-w-4xl mx-auto" />
 
       <section className="py-20 bg-ink-50">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between mb-12">
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <Ghost className="w-6 h-6 text-purple-600" />
+                <h2 className="font-brush text-4xl text-ink-900">失传名剑</h2>
+              </div>
+              <p className="font-song text-ink-600 ml-9">湮没于历史长河中的神秘名剑</p>
+            </div>
+            <Link
+              to="/legendary-swords"
+              className="group hidden md:flex items-center gap-1 text-purple-600 font-song hover:text-purple-700 transition-colors"
+            >
+              进入档案库
+              <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
+          
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="h-96 bg-ink-100 animate-pulse" />
+              ))}
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {popularLegendarySwords.map((sword, index) => (
+                  <LegendarySwordCard key={sword.id} sword={sword} delay={index * 100} />
+                ))}
+              </div>
+              
+              <div className="mt-8 text-center md:hidden">
+                <Link
+                  to="/legendary-swords"
+                  className="inline-flex items-center gap-1 text-purple-600 font-song hover:text-purple-700 transition-colors"
+                >
+                  浏览全部失传名剑
+                  <ChevronRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </>
+          )}
+        </div>
+      </section>
+
+      <div className="ink-divider max-w-4xl mx-auto" />
+
+      <section className="py-20 bg-ink-100">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-12">
             <div>
