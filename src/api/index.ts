@@ -1,4 +1,11 @@
-import type { Sword, Swordsman, SwordsmanDetail, Sect, ApiResponse, SwordListResponse, SwordFilterParams, SwordHeritage, SwordsmanSwordTenure, MapLocation, HistoricalEvent, RegionStats, DynastyGeoStats, MapFilterParams, ComparisonLibrary, WuxiaWork, KnowledgeArticle, KnowledgeCategoryInfo, KnowledgeFilterParams, LegendarySword, LegendarySwordListResponse, LegendarySwordFilterParams } from '../types';
+import type {
+  Sword, Swordsman, SwordsmanDetail, Sect, ApiResponse, SwordListResponse, SwordFilterParams,
+  SwordHeritage, SwordsmanSwordTenure, MapLocation, HistoricalEvent, RegionStats, DynastyGeoStats,
+  MapFilterParams, ComparisonLibrary, WuxiaWork, KnowledgeArticle, KnowledgeCategoryInfo,
+  KnowledgeFilterParams, LegendarySword, LegendarySwordListResponse, LegendarySwordFilterParams,
+  SwordCollection, MuseumCollectionListResponse, MuseumFilterParams, CollectionInstitution,
+  DiscoverySite, DynastyPreservationStats, InstitutionStats, MuseumOverviewStats
+} from '../types';
 
 const API_BASE = '/api';
 
@@ -245,5 +252,67 @@ export const legendarySwordApi = {
     avgMystery: number;
   }> => {
     return request('/legendary-swords/stats');
+  },
+};
+
+export const museumApi = {
+  getCollections: (params: MuseumFilterParams = {}): Promise<MuseumCollectionListResponse> => {
+    const query = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined) {
+        query.append(key, String(value));
+      }
+    });
+    const queryString = query.toString();
+    return request<MuseumCollectionListResponse>(`/museum/collections${queryString ? `?${queryString}` : ''}`);
+  },
+
+  getCollectionById: (id: string): Promise<SwordCollection> => {
+    return request<SwordCollection>(`/museum/collections/${id}`);
+  },
+
+  getCollectionsBySwordId: (swordId: string): Promise<SwordCollection[]> => {
+    return request<SwordCollection[]>(`/museum/collections/by-sword/${swordId}`);
+  },
+
+  getCollectionsByInstitutionId: (institutionId: string): Promise<SwordCollection[]> => {
+    return request<SwordCollection[]>(`/museum/collections/by-institution/${institutionId}`);
+  },
+
+  getOverviewStats: (): Promise<MuseumOverviewStats> => {
+    return request<MuseumOverviewStats>('/museum/collections/overview-stats');
+  },
+
+  getDynastyPreservationStats: (): Promise<DynastyPreservationStats[]> => {
+    return request<DynastyPreservationStats[]>('/museum/collections/dynasty-stats');
+  },
+
+  getInstitutionStats: (): Promise<InstitutionStats[]> => {
+    return request<InstitutionStats[]>('/museum/collections/institution-stats');
+  },
+
+  getAvailableFilters: (): Promise<{
+    dynasties: string[];
+    regions: string[];
+    preservationStatuses: string[];
+    institutions: CollectionInstitution[];
+  }> => {
+    return request('/museum/collections/filters');
+  },
+
+  getAllInstitutions: (): Promise<CollectionInstitution[]> => {
+    return request<CollectionInstitution[]>('/museum/institutions');
+  },
+
+  getInstitutionById: (id: string): Promise<CollectionInstitution> => {
+    return request<CollectionInstitution>(`/museum/institutions/${id}`);
+  },
+
+  getAllDiscoverySites: (): Promise<DiscoverySite[]> => {
+    return request<DiscoverySite[]>('/museum/discovery-sites');
+  },
+
+  getDiscoverySiteById: (id: string): Promise<DiscoverySite> => {
+    return request<DiscoverySite>(`/museum/discovery-sites/${id}`);
   },
 };

@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Sword, Home, Users, Building2, Map, BarChart3, BookOpen, Ghost } from 'lucide-react';
+import { Menu, X, Sword, Home, Users, Building2, Map, BarChart3, BookOpen, Ghost, Landmark } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
   { path: '/', label: '首页', icon: Home },
   { path: '/swords', label: '名剑谱', icon: Sword },
   { path: '/legendary-swords', label: '失传名剑', icon: Ghost },
+  { path: '/museum', label: '名剑收藏馆', icon: Landmark },
   { path: '/swordsmen', label: '剑客', icon: Users },
   { path: '/sects', label: '门派', icon: Building2 },
   { path: '/knowledge', label: '知识学院', icon: BookOpen },

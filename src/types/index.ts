@@ -371,6 +371,149 @@ export interface LegendarySwordFilterParams {
   sortOrder?: 'asc' | 'desc';
 }
 
+export type PreservationStatus = '完好保存' | '部分残损' | '严重残损' | '修复中' | '复制展示' | '下落不明' | '已损毁';
+
+export type InstitutionType = '国家级博物馆' | '省级博物馆' | '市级博物馆' | '高校博物馆' | '私人收藏' | '考古研究所' | '文物局' | '海外机构';
+
+export type AcquisitionMethod = '考古发掘' | '民间征集' | '私人捐赠' | '国家调拨' | '依法收缴' | '海外回流' | '馆际交换' | '考古采集';
+
+export interface CollectionInstitution {
+  id: string;
+  name: string;
+  type: InstitutionType;
+  location: string;
+  region: string;
+  foundingYear: string;
+  description: string;
+  logoUrl?: string;
+  collectionCount: number;
+  contactInfo?: string;
+  website?: string;
+}
+
+export interface DiscoverySite {
+  id: string;
+  name: string;
+  location: string;
+  region: string;
+  coordinates?: { lat: number; lng: number };
+  discoveryYear: string;
+  discoveryMethod: '墓葬' | '窖藏' | '遗址' | '水下沉船' | '传世品' | '偶然发现';
+  excavator?: string;
+  description: string;
+  relatedArtifactCount: number;
+}
+
+export interface ProvenanceRecord {
+  id: string;
+  collectionId: string;
+  year: string;
+  eventType: '铸造' | '首次记载' | '入藏' | '流转' | '修复' | '展览' | '出土' | '丢失' | '损毁' | '复制';
+  description: string;
+  location?: string;
+  institutionId?: string;
+  institutionName?: string;
+  person?: string;
+  excavator?: string;
+  sourceDocument?: string;
+  evidence: '档案记载' | '考古证据' | '专家鉴定' | '口述传承' | '照片记录' | '文献考证';
+  notes?: string;
+}
+
+export interface SwordCollection {
+  id: string;
+  swordId: string;
+  swordName: string;
+  swordAlias: string;
+  swordImageUrl: string;
+  dynasty: string;
+  forgingEra: string;
+  material: string;
+  length: number;
+  width: number;
+  weight: number;
+  preservationStatus: PreservationStatus;
+  conditionReport: string;
+  currentInstitutionId: string;
+  currentInstitutionName: string;
+  currentLocation: string;
+  displayLocation?: string;
+  accessionNumber: string;
+  accessionDate: string;
+  acquisitionMethod: AcquisitionMethod;
+  discoverySiteId?: string;
+  discoverySiteName?: string;
+  discoveryYear?: string;
+  previousOwners: string[];
+  provenanceRecords: ProvenanceRecord[];
+  exhibitionHistory: string[];
+  conservationHistory: string[];
+  appraisalValue?: string;
+  insuranceValue?: string;
+  authenticityLevel: 1 | 2 | 3 | 4 | 5;
+  researchNotes?: string;
+  relatedArtifactIds: string[];
+  catalogImages: string[];
+  lastInspectionDate: string;
+  nextInspectionDate?: string;
+  isOnDisplay: boolean;
+  isRestricted: boolean;
+  tags: string[];
+}
+
+export interface MuseumCollectionListResponse {
+  list: SwordCollection[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+export interface MuseumFilterParams {
+  page?: number;
+  limit?: number;
+  dynasty?: string;
+  preservationStatus?: PreservationStatus;
+  institutionId?: string;
+  region?: string;
+  isOnDisplay?: boolean;
+  keyword?: string;
+  sortBy?: 'accessionDate' | 'dynasty' | 'authenticityLevel' | 'length' | 'name';
+  sortOrder?: 'asc' | 'desc';
+}
+
+export interface DynastyPreservationStats {
+  dynasty: string;
+  totalCount: number;
+  byStatus: Record<PreservationStatus, number>;
+  intactRate: number;
+  displayedCount: number;
+  avgAuthenticity: number;
+}
+
+export interface InstitutionStats {
+  institution: CollectionInstitution;
+  collectionCount: number;
+  byDynasty: Record<string, number>;
+  byStatus: Record<PreservationStatus, number>;
+  displayedCount: number;
+  avgAuthenticity: number;
+  totalValue?: string;
+}
+
+export interface MuseumOverviewStats {
+  totalCollections: number;
+  totalInstitutions: number;
+  totalDiscoverySites: number;
+  totalProvenanceRecords: number;
+  byDynasty: Record<string, number>;
+  byPreservationStatus: Record<PreservationStatus, number>;
+  byRegion: Record<string, number>;
+  overallIntactRate: number;
+  displayedCount: number;
+  avgAuthenticity: number;
+  recentlyAdded: SwordCollection[];
+}
+
 export interface ComparisonLibrary {
   id: string;
   targetType: ComparisonTargetType;

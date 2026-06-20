@@ -19,6 +19,7 @@ import mapRoutes from './src/routes/map.js'
 import comparisonRoutes from './src/routes/comparison.js'
 import knowledgeRoutes from './src/routes/knowledge.js'
 import legendarySwordRoutes from './src/routes/legendarySwords.js'
+import museumRoutes from './src/routes/museum.js'
 
 // for esm mode
 const __filename = fileURLToPath(import.meta.url)
@@ -44,6 +45,7 @@ app.use('/api/map', mapRoutes)
 app.use('/api/comparison', comparisonRoutes)
 app.use('/api/knowledge', knowledgeRoutes)
 app.use('/api/legendary-swords', legendarySwordRoutes)
+app.use('/api/museum', museumRoutes)
 
 /**
  * health
