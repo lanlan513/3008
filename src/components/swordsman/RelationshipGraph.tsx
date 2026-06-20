@@ -67,12 +67,7 @@ export default function RelationshipGraph({
     };
   };
 
-  const isValidRelationship = (rel: Relationship) => {
-    const relSwordsmen = ['2', '3', '4', '5', '6', '7', '8'];
-    return relSwordsmen.includes(rel.swordsmanId);
-  };
-
-  const validRelationships = relationships.filter(isValidRelationship);
+  const validRelationships = relationships;
 
   return (
     <div className="ink-card p-6">

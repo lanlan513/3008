@@ -353,7 +353,7 @@ export default function SwordsmanDetail() {
           </div>
 
           <div className="space-y-8">
-            <div className="ink-card p-6 animate-fade-in-up sticky top-24" style={{ animationDelay: '0.3s', animationFillMode: 'forwards', opacity: 0 }}>
+            <div className="ink-card p-6 animate-fade-in-up" style={{ animationDelay: '0.3s', animationFillMode: 'forwards', opacity: 0 }}>
               <h3 className="font-brush text-2xl text-ink-900 mb-6 flex items-center gap-2">
                 <SwordIcon className="w-5 h-5 text-cinnabar-600" />
                 佩剑名剑
