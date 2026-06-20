@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Sword, Home, Users, Building2, Map, BarChart3 } from 'lucide-react';
+import { Menu, X, Sword, Home, Users, Building2, Map, BarChart3, BookOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -8,6 +8,7 @@ const navItems = [
   { path: '/swords', label: '名剑谱', icon: Sword },
   { path: '/swordsmen', label: '剑客', icon: Users },
   { path: '/sects', label: '门派', icon: Building2 },
+  { path: '/knowledge', label: '知识学院', icon: BookOpen },
   { path: '/map', label: '江湖地图', icon: Map },
   { path: '/map/stats', label: '地理统计', icon: BarChart3 },
 ];

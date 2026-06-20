@@ -289,3 +289,37 @@ export interface ComparisonLibrary {
   works: WuxiaWork[];
   analysis?: string;
 }
+
+export type KnowledgeCategory = '剑材' | '锻造工艺' | '淬火方法' | '装具结构' | '铸剑流派';
+
+export interface KnowledgeArticle {
+  id: string;
+  title: string;
+  category: KnowledgeCategory;
+  summary: string;
+  content: string;
+  coverUrl: string;
+  tags: string[];
+  relatedSwordIds: string[];
+  relatedSwordsmanIds: string[];
+  relatedSectIds: string[];
+  relatedArticleIds: string[];
+  dynasty?: string;
+  popularity: number;
+  createdAt: string;
+}
+
+export interface KnowledgeCategoryInfo {
+  category: KnowledgeCategory;
+  label: string;
+  description: string;
+  icon: string;
+  count: number;
+}
+
+export interface KnowledgeFilterParams {
+  category?: KnowledgeCategory;
+  keyword?: string;
+  sortBy?: 'popularity' | 'createdAt';
+  sortOrder?: 'asc' | 'desc';
+}

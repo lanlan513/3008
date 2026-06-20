@@ -10,6 +10,8 @@ import SectList from "@/pages/SectList";
 import JianghuMap from "@/pages/JianghuMap";
 import GeographyStats from "@/pages/GeographyStats";
 import ComparisonDetail from "@/pages/ComparisonDetail";
+import KnowledgeList from "@/pages/KnowledgeList";
+import KnowledgeDetail from "@/pages/KnowledgeDetail";
 
 export default function App() {
   return (
@@ -27,6 +29,8 @@ export default function App() {
             <Route path="/map" element={<JianghuMap />} />
             <Route path="/map/stats" element={<GeographyStats />} />
             <Route path="/comparison/:targetType/:id" element={<ComparisonDetail />} />
+            <Route path="/knowledge" element={<KnowledgeList />} />
+            <Route path="/knowledge/:id" element={<KnowledgeDetail />} />
           </Routes>
         </main>
         <Footer />

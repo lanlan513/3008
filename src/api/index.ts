@@ -1,4 +1,4 @@
-import type { Sword, Swordsman, SwordsmanDetail, Sect, ApiResponse, SwordListResponse, SwordFilterParams, SwordHeritage, SwordsmanSwordTenure, MapLocation, HistoricalEvent, RegionStats, DynastyGeoStats, MapFilterParams, ComparisonLibrary, WuxiaWork } from '../types';
+import type { Sword, Swordsman, SwordsmanDetail, Sect, ApiResponse, SwordListResponse, SwordFilterParams, SwordHeritage, SwordsmanSwordTenure, MapLocation, HistoricalEvent, RegionStats, DynastyGeoStats, MapFilterParams, ComparisonLibrary, WuxiaWork, KnowledgeArticle, KnowledgeCategoryInfo, KnowledgeFilterParams } from '../types';
 
 const API_BASE = '/api';
 
@@ -176,5 +176,42 @@ export const comparisonApi = {
 
   getWorkById: (id: string): Promise<WuxiaWork> => {
     return request<WuxiaWork>(`/comparison/works/${id}`);
+  },
+};
+
+export const knowledgeApi = {
+  getCategories: (): Promise<KnowledgeCategoryInfo[]> => {
+    return request<KnowledgeCategoryInfo[]>('/knowledge/categories');
+  },
+
+  getArticles: (params: KnowledgeFilterParams = {}): Promise<KnowledgeArticle[]> => {
+    const query = new URLSearchParams();
+    if (params.category) query.append('category', params.category);
+    if (params.keyword) query.append('keyword', encodeURIComponent(params.keyword));
+    if (params.sortBy) query.append('sortBy', params.sortBy);
+    if (params.sortOrder) query.append('sortOrder', params.sortOrder);
+    const queryString = query.toString();
+    return request<KnowledgeArticle[]>(`/knowledge${queryString ? `?${queryString}` : ''}`);
+  },
+
+  getPopularArticles: (limit?: number): Promise<KnowledgeArticle[]> => {
+    const query = limit ? `?limit=${limit}` : '';
+    return request<KnowledgeArticle[]>(`/knowledge/popular${query}`);
+  },
+
+  getArticleById: (id: string): Promise<KnowledgeArticle> => {
+    return request<KnowledgeArticle>(`/knowledge/${id}`);
+  },
+
+  getRelatedArticles: (id: string): Promise<KnowledgeArticle[]> => {
+    return request<KnowledgeArticle[]>(`/knowledge/${id}/related`);
+  },
+
+  getArticlesBySwordId: (swordId: string): Promise<KnowledgeArticle[]> => {
+    return request<KnowledgeArticle[]>(`/knowledge/by-sword/${swordId}`);
+  },
+
+  getArticlesBySwordsmanId: (swordsmanId: string): Promise<KnowledgeArticle[]> => {
+    return request<KnowledgeArticle[]>(`/knowledge/by-swordsman/${swordsmanId}`);
   },
 };
