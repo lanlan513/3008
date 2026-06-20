@@ -19,6 +19,39 @@ export interface Sword {
   createdAt: string;
 }
 
+export interface SwordHolder {
+  id: string;
+  swordsmanId: string;
+  swordsmanName: string;
+  startYear: string;
+  endYear: string;
+  acquisitionMethod: '铸造' | '继承' | '赠与' | '夺取' | '发现' | '赏赐' | '其他';
+  lossMethod?: '传承' | '遗失' | '被夺' | '损毁' | '陪葬' | '化龙' | '其他';
+  description: string;
+  majorEvents: string[];
+}
+
+export interface SwordHeritage {
+  swordId: string;
+  swordName: string;
+  forgingYear: string;
+  currentStatus: '传世' | '失踪' | '损毁' | '陪葬' | '化龙';
+  lastKnownLocation?: string;
+  holders: SwordHolder[];
+}
+
+export interface SwordsmanSwordTenure {
+  swordId: string;
+  swordName: string;
+  swordAlias: string;
+  swordImageUrl: string;
+  startYear: string;
+  endYear: string;
+  acquisitionMethod: SwordHolder['acquisitionMethod'];
+  lossMethod?: SwordHolder['lossMethod'];
+  description: string;
+}
+
 export interface Swordsman {
   id: string;
   name: string;

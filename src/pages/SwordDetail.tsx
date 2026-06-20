@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Calendar, User, Building2, Flame, BookOpen, History, Sparkles, Share2, Heart, Users, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Calendar, User, Building2, Flame, BookOpen, History, Sparkles, Share2, Heart, Users, ChevronRight, ScrollText, Network } from 'lucide-react';
 import { swordApi, swordsmanApi } from '../api';
-import type { Sword, Swordsman } from '../types';
+import type { Sword, Swordsman, SwordHeritage } from '../types';
 import { cn } from '@/lib/utils';
+import HeritageTimeline from '../components/sword/HeritageTimeline';
+import SwordHolderGraph from '../components/sword/SwordHolderGraph';
 
 const ATTRIBUTE_LABELS: Record<string, { label: string; color: string }> = {
   sharpness: { label: '锋利', color: 'from-cinnabar-500 to-cinnabar-700' },
@@ -17,6 +19,7 @@ export default function SwordDetail() {
   const navigate = useNavigate();
   const [sword, setSword] = useState<Sword | null>(null);
   const [relatedSwordsmen, setRelatedSwordsmen] = useState<Swordsman[]>([]);
+  const [heritage, setHeritage] = useState<SwordHeritage | null>(null);
   const [loading, setLoading] = useState(true);
   const [isLiked, setIsLiked] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -27,12 +30,14 @@ export default function SwordDetail() {
     const fetchSword = async () => {
       setLoading(true);
       try {
-        const [swordData, swordsmenData] = await Promise.all([
+        const [swordData, swordsmenData, heritageData] = await Promise.all([
           swordApi.getSwordById(id),
           swordsmanApi.getSwordsmenBySwordId(id),
+          swordApi.getSwordHeritage(id),
         ]);
         setSword(swordData);
         setRelatedSwordsmen(swordsmenData);
+        setHeritage(heritageData);
       } catch (error) {
         console.error('Failed to fetch sword:', error);
       } finally {
@@ -187,6 +192,34 @@ export default function SwordDetail() {
                 </p>
               </div>
             </section>
+
+            {heritage && (
+              <>
+                <div className="ink-divider" />
+
+                <section>
+                  <div className="flex items-center gap-3 mb-6">
+                    <ScrollText className="w-6 h-6 text-cinnabar-600" />
+                    <h2 className="font-brush text-3xl text-ink-900">传承时间轴</h2>
+                  </div>
+                  <HeritageTimeline heritage={heritage} />
+                </section>
+
+                <div className="ink-divider" />
+
+                <section>
+                  <div className="flex items-center gap-3 mb-6">
+                    <Network className="w-6 h-6 text-emerald-600" />
+                    <h2 className="font-brush text-3xl text-ink-900">持有者关系图谱</h2>
+                  </div>
+                  <SwordHolderGraph
+                    heritage={heritage}
+                    swordName={sword.name}
+                    swordImageUrl={sword.imageUrl}
+                  />
+                </section>
+              </>
+            )}
           </div>
 
           <div className="space-y-8">

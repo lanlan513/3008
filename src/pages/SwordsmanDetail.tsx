@@ -15,11 +15,16 @@ import {
   Star,
   Zap,
   ChevronRight,
+  ScrollText,
+  Network,
 } from 'lucide-react';
 import { swordsmanApi } from '../api';
-import type { SwordsmanDetail, Sword, MartialArt, LifeEvent } from '../types';
+import type { SwordsmanDetail, Sword, MartialArt, LifeEvent, SwordsmanSwordTenure, SwordHeritage } from '../types';
 import { cn } from '@/lib/utils';
 import RelationshipGraph from '../components/swordsman/RelationshipGraph';
+import SwordsmanTenureList from '../components/swordsman/SwordsmanTenureList';
+import SwordsmanSwordGraph from '../components/swordsman/SwordsmanSwordGraph';
+import SwordHeritageChain from '../components/swordsman/SwordHeritageChain';
 
 const MARTIAL_ART_COLORS: Record<string, string> = {
   '剑法': 'from-cinnabar-500 to-cinnabar-700',
@@ -41,6 +46,8 @@ export default function SwordsmanDetail() {
   const navigate = useNavigate();
   const [swordsman, setSwordsman] = useState<SwordsmanDetail | null>(null);
   const [swords, setSwords] = useState<Sword[]>([]);
+  const [swordTenures, setSwordTenures] = useState<SwordsmanSwordTenure[]>([]);
+  const [heritages, setHeritages] = useState<SwordHeritage[]>([]);
   const [loading, setLoading] = useState(true);
   const [isLiked, setIsLiked] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -51,12 +58,16 @@ export default function SwordsmanDetail() {
     const fetchSwordsmanDetail = async () => {
       setLoading(true);
       try {
-        const [detailData, swordsData] = await Promise.all([
+        const [detailData, swordsData, tenuresData, heritagesData] = await Promise.all([
           swordsmanApi.getSwordsmanDetailById(id),
           swordsmanApi.getSwordsmanSwords(id),
+          swordsmanApi.getSwordsmanSwordTenures(id),
+          swordsmanApi.getSwordsmanHeritages(id),
         ]);
         setSwordsman(detailData);
         setSwords(swordsData);
+        setSwordTenures(tenuresData);
+        setHeritages(heritagesData);
       } catch (error) {
         console.error('Failed to fetch swordsman detail:', error);
       } finally {
@@ -337,6 +348,48 @@ export default function SwordsmanDetail() {
             </section>
 
             <div className="ink-divider" />
+
+            <section className="animate-fade-in-up" style={{ animationDelay: '0.55s', animationFillMode: 'forwards', opacity: 0 }}>
+              <div className="flex items-center gap-3 mb-6">
+                <ScrollText className="w-6 h-6 text-gold-600" />
+                <h2 className="font-brush text-3xl text-ink-900">名剑传承</h2>
+              </div>
+              <SwordsmanTenureList tenures={swordTenures} swordsmanName={swordsman.name} />
+            </section>
+
+            <div className="ink-divider" />
+
+            {heritages.length > 0 && (
+              <>
+                <section className="animate-fade-in-up" style={{ animationDelay: '0.57s', animationFillMode: 'forwards', opacity: 0 }}>
+                  <div className="flex items-center gap-3 mb-6">
+                    <Network className="w-6 h-6 text-cinnabar-600" />
+                    <h2 className="font-brush text-3xl text-ink-900">名剑谱系</h2>
+                  </div>
+                  <SwordsmanSwordGraph
+                    tenures={swordTenures}
+                    swordsmanName={swordsman.name}
+                    swordsmanAvatarUrl={swordsman.avatarUrl}
+                  />
+                </section>
+
+                <div className="ink-divider" />
+
+                <section className="animate-fade-in-up" style={{ animationDelay: '0.58s', animationFillMode: 'forwards', opacity: 0 }}>
+                  <div className="flex items-center gap-3 mb-6">
+                    <SwordIcon className="w-6 h-6 text-gold-600" />
+                    <h2 className="font-brush text-3xl text-ink-900">传承脉络</h2>
+                  </div>
+                  <SwordHeritageChain
+                    heritages={heritages}
+                    currentSwordsmanId={swordsman.id}
+                    currentSwordsmanName={swordsman.name}
+                  />
+                </section>
+
+                <div className="ink-divider" />
+              </>
+            )}
 
             <section className="animate-fade-in-up" style={{ animationDelay: '0.6s', animationFillMode: 'forwards', opacity: 0 }}>
               <div className="flex items-center gap-3 mb-6">

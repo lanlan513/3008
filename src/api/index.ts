@@ -1,4 +1,4 @@
-import type { Sword, Swordsman, SwordsmanDetail, Sect, ApiResponse, SwordListResponse, SwordFilterParams } from '../types';
+import type { Sword, Swordsman, SwordsmanDetail, Sect, ApiResponse, SwordListResponse, SwordFilterParams, SwordHeritage, SwordsmanSwordTenure } from '../types';
 
 const API_BASE = '/api';
 
@@ -33,6 +33,10 @@ export const swordApi = {
   getSwordById: (id: string): Promise<Sword> => {
     return request<Sword>(`/swords/${id}`);
   },
+
+  getSwordHeritage: (id: string): Promise<SwordHeritage> => {
+    return request<SwordHeritage>(`/swords/${id}/heritage`);
+  },
 };
 
 export const swordsmanApi = {
@@ -56,6 +60,14 @@ export const swordsmanApi = {
   
   getSwordsmanSwords: (id: string): Promise<Sword[]> => {
     return request<Sword[]>(`/swordsmen/${id}/swords`);
+  },
+
+  getSwordsmanSwordTenures: (id: string): Promise<SwordsmanSwordTenure[]> => {
+    return request<SwordsmanSwordTenure[]>(`/swordsmen/${id}/sword-tenures`);
+  },
+
+  getSwordsmanHeritages: (id: string): Promise<SwordHeritage[]> => {
+    return request<SwordHeritage[]>(`/swordsmen/${id}/heritages`);
   },
   
   getSwordsmenBySwordId: (swordId: string): Promise<Swordsman[]> => {
