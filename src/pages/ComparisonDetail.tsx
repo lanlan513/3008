@@ -209,8 +209,14 @@ export default function ComparisonDetail() {
 
         <section className="animate-fade-in-up" style={{ animationDelay: '0.4s', animationFillMode: 'forwards', opacity: 0 }}>
           <div className="flex items-center gap-3 mb-8">
-            <Users className="w-6 h-6 text-emerald-600" />
-            <h2 className="font-brush text-3xl text-ink-900">作者演绎对比</h2>
+            {isSwordsman ? (
+              <Users className="w-6 h-6 text-emerald-600" />
+            ) : (
+              <Sword className="w-6 h-6 text-gold-600" />
+            )}
+            <h2 className="font-brush text-3xl text-ink-900">
+              {isSwordsman ? '作者演绎对比' : '作品设计对比'}
+            </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -247,7 +253,9 @@ export default function ComparisonDetail() {
                   </div>
 
                   <div className="mb-4">
-                    <h4 className="font-song text-sm text-ink-500 mb-2">作者演绎特色</h4>
+                    <h4 className="font-song text-sm text-ink-500 mb-2">
+                      {isSwordsman ? '作者演绎特色' : '版本设计特色'}
+                    </h4>
                     <p className="font-song text-ink-700 leading-relaxed text-sm">
                       {version.authorInterpretation}
                     </p>

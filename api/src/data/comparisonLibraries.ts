@@ -686,7 +686,7 @@ const comparisonLibraries: ComparisonLibrary[] = [
   {
     id: 'cl1',
     targetType: 'swordsman',
-    targetId: '12',
+    targetId: '14',
     targetName: '关羽',
     targetAvatarUrl: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=guanyu%20god%20of%20war%20chinese%20folk%20deity%2C%20red%20face%20long%20beard%2C%20green%20dragon%20blade%2C%20ink%20painting%20style&image_size=square',
     coverUrl: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=guanyu%20multiple%20versions%20comparison%2C%20three%20kingdoms%20hero%2C%20different%20artistic%20styles%2C%20chinese%20history%20and%20culture%2C%20ink%20painting%20banner&image_size=landscape_16_9',
@@ -704,7 +704,7 @@ const comparisonLibraries: ComparisonLibrary[] = [
   {
     id: 'cl2',
     targetType: 'swordsman',
-    targetId: '16',
+    targetId: '8',
     targetName: '赵云',
     targetAvatarUrl: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=zhao%20yun%20chinese%20general%2C%20silver%20armor%20white%20robes%2C%20spear%20in%20hand%2C%20heroic%20warrior%2C%20ink%20painting&image_size=square',
     coverUrl: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=zhao%20yun%20multiple%20versions%20comparison%2C%20three%20kingdoms%20perfect%20general%2C%20different%20artistic%20styles%2C%20chinese%20history%20and%20culture%2C%20ink%20painting%20banner&image_size=landscape_16_9',
@@ -722,7 +722,7 @@ const comparisonLibraries: ComparisonLibrary[] = [
   {
     id: 'cl3',
     targetType: 'swordsman',
-    targetId: '17',
+    targetId: '6',
     targetName: '越王勾践',
     targetAvatarUrl: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=king%20goujian%20of%20yue%20ancient%20chinese%20ruler%2C%20retrying%20on%20bile%2C%20determined%20expression%2C%20traditional%20painting&image_size=square',
     coverUrl: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=king%20goujian%20multiple%20versions%20comparison%2C%20ancient%20chinese%20ruler%2C%20spring%20and%20autumn%20period%2C%20different%20historical%20records%2C%20ink%20painting%20banner&image_size=landscape_16_9',
