@@ -1,4 +1,4 @@
-import type { Sword, Swordsman, Sect, ApiResponse, SwordListResponse, SwordFilterParams } from '../types';
+import type { Sword, Swordsman, SwordsmanDetail, Sect, ApiResponse, SwordListResponse, SwordFilterParams } from '../types';
 
 const API_BASE = '/api';
 
@@ -48,6 +48,23 @@ export const swordsmanApi = {
   
   getSwordsmanById: (id: string): Promise<Swordsman> => {
     return request<Swordsman>(`/swordsmen/${id}`);
+  },
+  
+  getSwordsmanDetailById: (id: string): Promise<SwordsmanDetail> => {
+    return request<SwordsmanDetail>(`/swordsmen/${id}/detail`);
+  },
+  
+  getSwordsmanSwords: (id: string): Promise<Sword[]> => {
+    return request<Sword[]>(`/swordsmen/${id}/swords`);
+  },
+  
+  getSwordsmenBySwordId: (swordId: string): Promise<Swordsman[]> => {
+    return request<Swordsman[]>(`/swordsmen/by-sword/${swordId}`);
+  },
+  
+  searchSwordsmen: (keyword: string): Promise<Swordsman[]> => {
+    const query = keyword ? `?keyword=${encodeURIComponent(keyword)}` : '';
+    return request<Swordsman[]>(`/swordsmen/search${query}`);
   },
 };
 

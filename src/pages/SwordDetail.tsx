@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Calendar, User, Building2, Flame, BookOpen, History, Sparkles, Share2, Heart } from 'lucide-react';
-import { swordApi } from '../api';
-import type { Sword } from '../types';
+import { ArrowLeft, Calendar, User, Building2, Flame, BookOpen, History, Sparkles, Share2, Heart, Users, ChevronRight } from 'lucide-react';
+import { swordApi, swordsmanApi } from '../api';
+import type { Sword, Swordsman } from '../types';
 import { cn } from '@/lib/utils';
 
 const ATTRIBUTE_LABELS: Record<string, { label: string; color: string }> = {
@@ -16,6 +16,7 @@ export default function SwordDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [sword, setSword] = useState<Sword | null>(null);
+  const [relatedSwordsmen, setRelatedSwordsmen] = useState<Swordsman[]>([]);
   const [loading, setLoading] = useState(true);
   const [isLiked, setIsLiked] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -26,8 +27,12 @@ export default function SwordDetail() {
     const fetchSword = async () => {
       setLoading(true);
       try {
-        const data = await swordApi.getSwordById(id);
-        setSword(data);
+        const [swordData, swordsmenData] = await Promise.all([
+          swordApi.getSwordById(id),
+          swordsmanApi.getSwordsmenBySwordId(id),
+        ]);
+        setSword(swordData);
+        setRelatedSwordsmen(swordsmenData);
       } catch (error) {
         console.error('Failed to fetch sword:', error);
       } finally {
@@ -232,6 +237,50 @@ export default function SwordDetail() {
             </div>
 
             <div className="ink-card p-6 animate-fade-in-up" style={{ animationDelay: '0.4s', animationFillMode: 'forwards', opacity: 0 }}>
+              <h3 className="font-brush text-xl text-ink-900 mb-4 flex items-center gap-2">
+                <Users className="w-5 h-5 text-emerald-600" />
+                关联剑客
+              </h3>
+              
+              {relatedSwordsmen.length > 0 ? (
+                <div className="space-y-3">
+                  {relatedSwordsmen.map((swordsman) => (
+                    <Link
+                      key={swordsman.id}
+                      to={`/swordsmen/${swordsman.id}`}
+                      className="block group"
+                    >
+                      <div className="flex items-center gap-3 p-2 bg-ink-50 hover:bg-ink-100 transition-all duration-300">
+                        <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-ink-200 flex-shrink-0 group-hover:border-cinnabar-500 transition-colors">
+                          <img
+                            src={swordsman.avatarUrl}
+                            alt={swordsman.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="font-brush text-base text-ink-900 group-hover:text-cinnabar-700 transition-colors">
+                              {swordsman.name}
+                            </span>
+                            <span className="text-[10px] text-gold-600 font-song">「{swordsman.title}」</span>
+                          </div>
+                          <span className="text-[10px] text-ink-500 font-song">{swordsman.dynasty} · {swordsman.sect}</span>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-ink-400 group-hover:text-cinnabar-600 transition-colors" />
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-4">
+                  <Users className="w-8 h-8 text-ink-300 mx-auto mb-2" />
+                  <p className="font-song text-ink-500 text-sm">暂无关联剑客</p>
+                </div>
+              )}
+            </div>
+
+            <div className="ink-card p-6 animate-fade-in-up" style={{ animationDelay: '0.5s', animationFillMode: 'forwards', opacity: 0 }}>
               <h3 className="font-brush text-xl text-ink-900 mb-4">相关标签</h3>
               <div className="flex flex-wrap gap-2">
                 <span className="seal-stamp text-xs">{sword.dynasty}</span>
@@ -247,7 +296,7 @@ export default function SwordDetail() {
               </div>
             </div>
 
-            <div className="ink-card p-6 animate-fade-in-up" style={{ animationDelay: '0.5s', animationFillMode: 'forwards', opacity: 0 }}>
+            <div className="ink-card p-6 animate-fade-in-up" style={{ animationDelay: '0.6s', animationFillMode: 'forwards', opacity: 0 }}>
               <h3 className="font-brush text-xl text-ink-900 mb-4">了解更多</h3>
               <div className="space-y-3">
                 <Link

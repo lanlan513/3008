@@ -31,6 +31,38 @@ export interface Swordsman {
   createdAt: string;
 }
 
+export interface MartialArt {
+  name: string;
+  type: '剑法' | '内功' | '轻功' | '掌法' | '其他';
+  level: '入门' | '熟练' | '精通' | '出神入化';
+  description: string;
+}
+
+export interface LifeEvent {
+  id: string;
+  year: string;
+  title: string;
+  description: string;
+  relatedSwords?: string[];
+  relatedSwordsmen?: string[];
+}
+
+export interface Relationship {
+  swordsmanId: string;
+  swordsmanName: string;
+  type: '师父' | '弟子' | '同门' | '夫妻' | '父子' | '兄弟' | '朋友' | '仇敌' | '知己' | '其他';
+  description: string;
+}
+
+export interface SwordsmanDetail extends Swordsman {
+  birthYear?: string;
+  deathYear?: string;
+  birthplace?: string;
+  martialArts: MartialArt[];
+  events: LifeEvent[];
+  relationships: Relationship[];
+}
+
 export interface Sect {
   id: string;
   name: string;

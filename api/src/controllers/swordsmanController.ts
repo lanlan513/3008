@@ -49,3 +49,64 @@ export const getSwordsmanById = (req: Request, res: Response) => {
   
   res.json(response);
 };
+
+export const getSwordsmanDetailById = (req: Request, res: Response) => {
+  const { id } = req.params;
+  const swordsman = swordsmanService.getSwordsmanDetailById(id);
+  
+  if (!swordsman) {
+    const response: ApiResponse<null> = {
+      code: 404,
+      message: '剑客未找到',
+      data: null,
+    };
+    return res.status(404).json(response);
+  }
+  
+  const response: ApiResponse<typeof swordsman> = {
+    code: 200,
+    message: 'success',
+    data: swordsman,
+  };
+  
+  res.json(response);
+};
+
+export const getSwordsmanSwords = (req: Request, res: Response) => {
+  const { id } = req.params;
+  const swords = swordsmanService.getSwordsmanSwords(id);
+  
+  const response: ApiResponse<typeof swords> = {
+    code: 200,
+    message: 'success',
+    data: swords,
+  };
+  
+  res.json(response);
+};
+
+export const getSwordsmenBySwordId = (req: Request, res: Response) => {
+  const { swordId } = req.params;
+  const swordsmen = swordsmanService.getSwordsmenBySwordId(swordId);
+  
+  const response: ApiResponse<typeof swordsmen> = {
+    code: 200,
+    message: 'success',
+    data: swordsmen,
+  };
+  
+  res.json(response);
+};
+
+export const searchSwordsmen = (req: Request, res: Response) => {
+  const keyword = req.query.keyword as string;
+  const swordsmen = swordsmanService.searchSwordsmen(keyword || '');
+  
+  const response: ApiResponse<typeof swordsmen> = {
+    code: 200,
+    message: 'success',
+    data: swordsmen,
+  };
+  
+  res.json(response);
+};
