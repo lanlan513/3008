@@ -82,8 +82,9 @@ export default function KnowledgeDetail() {
   const renderMarkdown = (content: string) => {
     const lines = content.split('\n');
     const elements: JSX.Element[] = [];
-    let currentList: string[] = [];
+    const currentList: JSX.Element[] = [];
     let listKey = 0;
+    let itemKey = 0;
 
     const flushList = () => {
       if (currentList.length > 0) {
@@ -96,8 +97,30 @@ export default function KnowledgeDetail() {
             ))}
           </ul>
         );
-        currentList = [];
+        currentList.length = 0;
       }
+    };
+
+    const renderInlineBold = (text: string): JSX.Element => {
+      const parts: (string | JSX.Element)[] = [];
+      let lastIndex = 0;
+      let keyCounter = 0;
+      const regex = /\*\*(.+?)\*\*/g;
+      let match;
+
+      while ((match = regex.exec(text)) !== null) {
+        if (match.index > lastIndex) {
+          parts.push(text.slice(lastIndex, match.index));
+        }
+        parts.push(<strong key={`bold-${keyCounter++}`} className="text-ink-900">{match[1]}</strong>);
+        lastIndex = match.index + match[0].length;
+      }
+
+      if (lastIndex < text.length) {
+        parts.push(text.slice(lastIndex));
+      }
+
+      return <>{parts}</>;
     };
 
     lines.forEach((line, index) => {
@@ -116,18 +139,23 @@ export default function KnowledgeDetail() {
             {line.replace('### ', '')}
           </h3>
         );
-      } else if (line.startsWith('- **')) {
+      } else if (line.startsWith('- **') || line.startsWith('- ')) {
         const match = line.match(/^- \*\*(.+?)\*\*[:：]?\s*(.*)/);
         if (match) {
           currentList.push(
-            `<strong>${match[1]}</strong>${match[2] ? '：' + match[2] : ''}`
+            <span key={`item-${itemKey++}`}>
+              <strong className="text-ink-900">{match[1]}</strong>
+              {match[2] ? `：${match[2]}` : ''}
+            </span>
           );
+        } else {
+          const text = line.replace(/^- /, '');
+          currentList.push(<span key={`item-${itemKey++}`}>{renderInlineBold(text)}</span>);
         }
-      } else if (line.startsWith('- ')) {
-        currentList.push(line.replace('- ', ''));
       } else if (line.trim() === '') {
         flushList();
       } else if (/^\d+\.\s/.test(line)) {
+        flushList();
         const match = line.match(/^(\d+)\.\s\*\*(.+?)\*\*[:：]?\s*(.*)/);
         if (match) {
           elements.push(
@@ -150,7 +178,7 @@ export default function KnowledgeDetail() {
                   {simpleMatch[1]}
                 </span>
                 <span className="font-song text-ink-700 leading-relaxed">
-                  {simpleMatch[2]}
+                  {renderInlineBold(simpleMatch[2])}
                 </span>
               </div>
             );
@@ -160,7 +188,7 @@ export default function KnowledgeDetail() {
         flushList();
         elements.push(
           <p key={index} className="font-song text-ink-700 leading-loose mb-4">
-            {line}
+            {renderInlineBold(line)}
           </p>
         );
       }
