@@ -349,7 +349,7 @@ export default function SwordsmanDetail() {
 
             <div className="ink-divider" />
 
-            <section className="animate-fade-in-up" style={{ animationDelay: '0.55s', animationFillMode: 'forwards', opacity: 0 }}>
+            <section>
               <div className="flex items-center gap-3 mb-6">
                 <ScrollText className="w-6 h-6 text-gold-600" />
                 <h2 className="font-brush text-3xl text-ink-900">名剑传承</h2>
@@ -361,7 +361,7 @@ export default function SwordsmanDetail() {
 
             {heritages.length > 0 && (
               <>
-                <section className="animate-fade-in-up" style={{ animationDelay: '0.57s', animationFillMode: 'forwards', opacity: 0 }}>
+                <section>
                   <div className="flex items-center gap-3 mb-6">
                     <Network className="w-6 h-6 text-cinnabar-600" />
                     <h2 className="font-brush text-3xl text-ink-900">名剑谱系</h2>
@@ -375,7 +375,7 @@ export default function SwordsmanDetail() {
 
                 <div className="ink-divider" />
 
-                <section className="animate-fade-in-up" style={{ animationDelay: '0.58s', animationFillMode: 'forwards', opacity: 0 }}>
+                <section>
                   <div className="flex items-center gap-3 mb-6">
                     <SwordIcon className="w-6 h-6 text-gold-600" />
                     <h2 className="font-brush text-3xl text-ink-900">传承脉络</h2>

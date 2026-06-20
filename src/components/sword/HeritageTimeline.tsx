@@ -111,7 +111,7 @@ function HolderNode({ holder, index, isExpanded, onToggle, isLast }: HolderNodeP
   const acquisitionColor = ACQUISITION_COLORS[holder.acquisitionMethod] || ACQUISITION_COLORS['其他'];
 
   return (
-    <div className="relative animate-fade-in-up" style={{ animationDelay: `${0.3 + index * 0.1}s`}>
+    <div className="relative animate-fade-in-up" style={{ animationDelay: `${0.3 + index * 0.1}s` }}>
       <div className="flex gap-4">
         <div className="relative flex flex-col items-center">
           <div className={cn(
